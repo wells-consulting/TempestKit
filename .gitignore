@@ -1,0 +1,37 @@
+# macOS
+.DS_Store
+._*
+__MACOSX/
+
+# Editors
+*.swp
+*.swo
+
+# Xcode, per user
+xcuserdata/
+DerivedData/
+build/
+DeveloperOverrides.xcconfig
+
+# Swift Package Manager
+.build/
+.swiftpm/configuration/registries.json
+.swiftpm/configuration/mirrors.json
+.swiftpm/xcode/package.xcworkspace/
+/Package.resolved
+
+# Python in Scripts
+__pycache__/
+
+# Credentials
+.netrc
+
+# Agent tool state; the skill links are committed
+!.claude/
+.claude/*
+!.claude/skills/
+
+# Local scratch, never shared: captures, backups, large media
+/Sandbox/
+# Working notes and plans; what ships lives at the top of Documents/
+/Documents/Sandbox/

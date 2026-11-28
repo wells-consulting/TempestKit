@@ -1,0 +1,10 @@
+#!/bin/sh
+#
+# Lints the package before the commit goes through. `git commit --no-verify`
+# skips it. Turn it on with:
+#
+#   git config core.hooksPath .githooks
+
+set -eu
+
+exec "$(git rev-parse --show-toplevel)/Scripts/lint.sh"

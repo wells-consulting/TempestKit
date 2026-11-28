@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test on macOS
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Show the toolchain
+        run: |
+          xcodebuild -version
+          swift --version
+      - name: Test
+        run: swift test
+
+  docs:
+    name: Build Documentation
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Build
+        run: >
+          xcodebuild docbuild
+          -scheme TempestKit-Package
+          -destination 'generic/platform=macOS'
+          -derivedDataPath "$RUNNER_TEMP/dd"
+          OTHER_DOCC_FLAGS="--warnings-as-errors"
+          -quiet
+
+  platforms:
+    name: Build ${{ matrix.destination }}
+    runs-on: macos-26
+    strategy:
+      fail-fast: false
+      matrix:
+        destination: [iOS, tvOS, watchOS]
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Build
+        run: >
+          xcodebuild -scheme TempestKit
+          -destination "generic/platform=${{ matrix.destination }}"
+          -derivedDataPath "$RUNNER_TEMP/dd"
+          CODE_SIGNING_ALLOWED=NO -quiet build
+
+  linux:
+    name: Test on Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Show the toolchain
+        run: swift --version
+      - name: Test
+        run: swift test

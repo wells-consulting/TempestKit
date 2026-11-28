@@ -1,0 +1,34 @@
+#!/bin/sh
+#
+# Rejects the attribution lines the repo's guide doesn't use, and checks the
+# trailer it does. Turn it on with:
+#
+#   git config core.hooksPath .githooks
+
+set -eu
+
+message=$(cat "$1")
+
+if printf '%s\n' "$message" | grep -qiE '^Co-Authored-By:'; then
+    echo 'No Co-Authored-By trailers. End the message with "Assisted-by: AI (<model>)".' >&2
+    exit 1
+fi
+
+if printf '%s\n' "$message" | grep -qiE '^Generated with'; then
+    echo 'No "Generated with" lines. End the message with "Assisted-by: AI (<model>)".' >&2
+    exit 1
+fi
+
+if printf '%s\n' "$message" | grep -qiE '^Assistance provided by'; then
+    echo 'Use the trailer "Assisted-by: AI (<model>)", not a prose line.' >&2
+    exit 1
+fi
+
+if printf '%s\n' "$message" | grep -q '^Assisted-by:'; then
+    if ! printf '%s\n' "$message" | grep -qE '^Assisted-by: AI \(.+\)$'; then
+        echo 'The trailer must read "Assisted-by: AI (<model>)", with the model named.' >&2
+        exit 1
+    fi
+else
+    echo 'Reminder: if an assistant helped, end the message with "Assisted-by: AI (<model>)".' >&2
+fi

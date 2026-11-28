@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "lineLength": 120,
+  "indentation": {
+    "spaces": 4
+  },
+  "tabWidth": 4,
+  "lineBreakBeforeEachArgument": true,
+  "noAssignmentInExpressions": {
+    "allowedFunctions": [
+      "XCTAssertNoThrow"
+    ]
+  },
+  "rules": {
+    "GroupNumericLiterals": true,
+    "OrderedImports": false,
+    "UseEarlyExits": false,
+    "UseExplicitNilCheckInConditions": true,
+    "UseLetInEveryBoundCaseVariable": false,
+    "UseSingleLinePropertyGetter": true,
+    "UseTripleSlashForDocumentationComments": true,
+    "UseWhereClausesInForLoops": true
+  }
+}
